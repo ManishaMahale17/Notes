@@ -1,0 +1,1048 @@
+CRUD APPlication using Reactjs,Material UI,Json SERVER
+CRUD:
+<!-- CRUD operation in React stands for Create, Read, Update, and Delete. CRUD is an important concept for organizing and managing data across the web application. We will perform CRUD operation in the React application with local storage in the form of JavaScript Objects instead of using JSON servers or Axios in React. CRUD operations are referred to as -->
+
+<!-- Create: Creating a post or adding the table row, adding data to the webpage, or creating content.
+Read: Reading or retrieving data from a web page
+Update: Updating or editing existing content on the webpage
+Delete: Deleting and removing the entry or content/post from the webpage -->
+JSON-SERVER:
+official site: https://jsonplaceholder.typicode.com/
+ High users use this: https://jsonplaceholder.typicode.com/users
+ <!-- json-placeholder internally use JSON-server -->
+ ______________________________________________************************************____________________________________________
+ lets start:
+ 1)1st make Header using NAVBAR
+ <!-- src/components/Navbar.js -->
+ import React from 'react'
+
+const Navbar = () => {
+  return (
+    <div>
+      <h1>Navbar</h1>
+    </div>
+  )
+}
+
+export default Navbar
+<!-- check in app.js importing navbar -->
+2)we use material UI for this so install this
+<!-- npm install @mui/material @emotion/react @emotion/styled -->
+<!-- Now search Appbar for making header -->
+
+import React from 'react'
+import {AppBar,Toolbar,Typography,styled} from '@mui/material'
+
+const Tabs=styled(Typography)`
+font-size:20px;
+margin-right:20px;
+
+const Navbar = () => {
+  return (
+    <div>
+      <AppBar>
+       <Toolbar>
+         <!-- <Typography>Home</Typography>
+        <Typography>About</Typography>
+        <Typography>All User</Typography>
+        <Typography>Add User</Typography> -->
+        <Tabs>Home</Tabs>
+            <Tabs>About</Tabs>
+            <Tabs>All User</Tabs>
+            <Tabs>Add User</Tabs>
+       </Toolbar>
+      </AppBar>
+
+    </div>
+  )
+}
+
+export default Navbar
+<!-- _______________________________________________________________ -->
+<!-- So navbar is done now make components for routing -->
+3) make components for routing in src/comp/Home.js
+4)If render app components in App.js but component display in below Appbar so give style to Appbar
+<!-- <AppBar position="static"> -->
+    <!-- _______________________________________________________________ -->
+ 5)Now make Routes
+    <!-- npm install react-router-dom -->
+   so App.js apply routes 
+
+import './App.css';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import AllUsers from './components/AllUsers';
+import AddUser from './components/AddUser';
+
+function App() {
+  return (
+    <BrowserRouter>
+    <Navbar/>
+    <Routes>
+    <Route path="/" element={<Home/>}/>
+    <Route path="/add" element={<AddUser/>}/>
+    <Route path="/all" element={<AllUsers/>}/>
+    </Routes>  
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+<!-- We can see it on url space like http://localhost:3000/add  =>got add comp like this. -->
+<!-- _______________________________________________________________ -->
+6)Now we want that compo open on navbar click :4
+<!-- Navabar.js -->
+import { NavLink } from 'react-router-dom'
+
+<NavLink to="/">Home</NavLink>
+<NavLink to="/add">Add User</NavLink>
+<NavLink to="/all">All User</NavLink>
+<!-- using above our css braeak -->
+
+const Tabs=styled(NavLink)`
+font-size:20px;
+margin-right:20px;
+color:white;
+text-decoration:none;
+`
+
+<!-- and again  -->
+<Tabs to="/">Home</Tabs>
+<Tabs to="/add">Add User</Tabs>
+<Tabs to="/all">All User</Tabs>
+
+<!-- So NavBar .js: -->
+import React from 'react'
+import {AppBar,Toolbar,styled} from '@mui/material'
+import { NavLink } from 'react-router-dom'
+
+const Tabs=styled(NavLink)`
+font-size:20px;
+margin-right:20px;
+color:white;
+text-decoration:none;
+
+`
+
+const Navbar = () => {
+  return (
+    <div>
+      <AppBar position="static">
+        <Toolbar>
+            <Tabs to="/">Home</Tabs>
+            <Tabs to="/add">Add User</Tabs>
+            <Tabs to="/all">All User</Tabs>
+      </Toolbar>
+      </AppBar>
+
+    </div>
+  )
+}
+
+export default Navbar
+<!-- _______________________________________________________________ -->
+7)Now Adduser.js
+<!-- make a form to receive user info -->
+import { FormControl, FormGroup, Input, InputLabel } from '@mui/material'
+
+const AddUser = () => {
+    return (
+      <div>
+        <FormGroup>
+          <FormControl>
+            <InputLabel>Name</InputLabel>
+            <Input/>
+          </FormControl>
+          <Button variant="contained">Submit</Button>
+        </FormGroup>
+      </div>
+    )
+  }
+  
+  export default AddUser
+  <!-- apply style on that -->
+
+  const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+<!-- relapce FormGroup to Container. -->
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import React from 'react'
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+
+const AddUser = () => {
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Add User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input/>
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input/>  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained'>Submit</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default AddUser
+
+<!-- Now show data in console that user put therir information   -->
+<!-- i) for get 1 value in console -->
+
+import React ,{useState}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  phone: ''
+}
+
+const AddUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const onValueChange = (e) => {
+    console.log(e.target.value)
+}
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Add User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name'/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city' />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' />  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained'>Submit</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default AddUser
+<!-- But in above we dont know which value contain witch textfield so only chanhe this-->
+const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    <!-- key value pair  -->
+    console.log(user)
+
+}
+<!-- ii)Now  call on AddUser when user sumbit data-->
+<Button variant='contained' onClick={addUserDetails()}>Submit</Button>
+<!-- and here we have to call that API -->
+const addUserDetails=()=>{
+  <!-- call api here  -->
+}
+<!-- _____________________________________________ -->
+(8)Make API
+<!-- make folder scr/service/api.js -->
+<!-- i)need to install axios to call/fetch api: npm install axios -->
+ 
+import axios from 'axios';
+ const API_URL = ''
+
+  export const addUser=async(data)=>{
+    try{
+        return await axios.post(API_URL,data)
+    }catch(error){
+      console.log("error while adding user",error.message);
+    }
+  }
+<!-- ii) adduser we have to call this goto AddUser.js -->
+import { addUser } from '../service/api';
+
+
+const addUserDetails=async()=>{
+    await addUser(user);
+    }
+    ______________________________________________************************************____________________________________________
+<!-- iii)Now we have to setup Json-server to get data,add data /fake server -->
+npm install json-server
+<!-- add this server in package.json: script -->
+"json-server": "json-server --watch src/Database/db.json --host 127.0.0.1 --port 8080"
+<!-- make a file batabase/db.json -->
+{
+    "users":[
+        {
+            "id":"1",
+            "name":"Manisha",
+            "email":"manisha@gamil.com",
+            "city":"Pune",
+            "contact":"8308875198"
+        }
+    ]
+}
+<!-- Run json server on another terminal -->
+npm run json-server
+<!-- Check this on broser -->
+http://localhost:8080/users
+<!-- Now paste that URL in api.js
+ -->
+ import axios from 'axios';
+ const API_URL = 'http://localhost:8080/users'
+
+  export const addUser=async(data)=>{
+    try{
+        return await axios.post(API_URL,data)
+    }catch(error){
+      console.log("error while adding user",error.message);
+    }
+  }
+  ______________________________________________************************************____________________________________________
+<!-- we got data on here  http://localhost:8080/users and also in db.json file it reflect. Now addUser is Done -->
+<!-- Final AddUser.js -->
+
+import React ,{useState}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import { addUser } from '../service/api';
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  contact: ''
+}
+
+const AddUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    console.log(user)
+
+}
+const addUserDetails=async()=>{
+await addUser(user);
+}
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Add User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name'/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city' />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' />  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained' onClick={addUserDetails()}>Submit</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default AddUser
+______________________________________________************************************____________________________________________
+
+<!-- ************************************************************* -->
+AllUser.js
+<!-- we want that data in the format of table in allUser comp -->
+1)1st make table:
+import { Table, TableBody, TableCell, TableHead } from '@mui/material'
+import React from 'react'
+const AllUsers = () => {
+  return (
+    <div>
+     <Table>
+      <TableHead>
+      <TableRow>
+      <TableCell>Name</TableCell>
+        <TableCell>Email</TableCell>
+        <TableCell>City</TableCell>
+        <TableCell>Contact Number</TableCell>
+      </TableRow>   
+        <TableBody>
+       </TableBody>
+      </TableHead>
+     </Table>
+    </div>
+  )
+}
+
+export default AllUsers
+<!-- 2) now for getting data to call API -->
+  <!-- service/api.js -->
+  //All user
+  export const getUser=async()=>{
+    try{
+      return await axios.get(API_URL);
+    }catch(error){
+      console.log("error while getting user",error.message);
+    }
+  }
+  <!-- import this in allUser.js -->
+  import { getUser } from '../service/api'
+  <!-- Now check on console if data is getting or not when mouting comp -->
+  import {useEffect} from 'react';
+import { Table, TableBody, TableCell, TableHead,TableRow } from '@mui/material'
+
+import { getUser } from '../service/api'
+import React from 'react'
+const AllUsers = () => {
+
+  useEffect(()=>{
+    getUserDetails();
+  },[])
+
+  const getUserDetails=async ()=>{
+    let response=await getUser();
+    console.log(response)
+  }
+  return (
+    <div>
+     <Table>
+      <TableHead>
+      <TableRow>
+      <TableCell>Name</TableCell>
+        <TableCell>Email</TableCell>
+        <TableCell>City</TableCell>
+        <TableCell>Contact Number</TableCell>
+      </TableRow>  
+      </TableHead> 
+        <TableBody>
+       </TableBody>
+     
+     </Table>
+    </div>
+  )
+}
+
+export default AllUsers
+<!-- Now setUser for getting data -->
+import {useEffect,useState} from 'react';
+import { Table, TableBody, TableCell, TableHead,TableRow } from '@mui/material'
+
+import { getUser } from '../service/api'
+import React from 'react'
+const AllUsers = () => {
+
+  const [users,setUsers]=useState([])
+  <!-- for empty array for store -->
+
+  useEffect(()=>{
+    getUserDetails();
+  },[])
+
+  const getUserDetails=async ()=>{
+    let response=await getUser();
+    console.log(response)
+    setUsers(response.data);
+    <!-- in data varialbe our all data so write this -->
+  }
+  <!-- Alluser.js -->
+  import {useEffect,useState} from 'react';
+import { Table, TableBody, TableCell, TableHead,TableRow } from '@mui/material'
+
+import { getUser } from '../service/api'
+import React from 'react'
+const AllUsers = () => {
+
+  const [users,setUsers]=useState([])
+
+  useEffect(()=>{
+    getUserDetails();
+  },[])
+
+  const getUserDetails=async ()=>{
+    let response=await getUser();
+    console.log(response)
+    setUsers(response.data);
+  }
+  return (
+    <div>
+     <Table>
+      <TableHead>
+      <TableRow>
+      <TableCell>Name</TableCell>
+        <TableCell>Email</TableCell>
+        <TableCell>City</TableCell>
+        <TableCell>Contact Number</TableCell>
+      </TableRow> 
+      </TableHead>  
+        <TableBody>
+          {
+            users.map(user=>(
+              <TableRow>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.city}</TableCell>
+                <TableCell>{user.contact}</TableCell>
+              </TableRow>
+            ))
+          }
+       </TableBody>
+     </Table>
+    </div>
+  )
+}
+
+export default AllUsers
+________________________________________________
+<!-- Now Apply Style on table -->
+import {useEffect,useState} from 'react';
+import { Table, TableBody, TableCell, TableHead,TableRow,styled } from '@mui/material'
+
+import { getUser } from '../service/api'
+import React from 'react'
+
+const StyledTable = styled(Table)`
+    width: 90%;
+    margin: 50px 0 0 50px;
+`;
+
+const THead = styled(TableRow)`
+    & > th {
+        font-size: 20px;
+        background: #000000;
+        color: #FFFFFF;
+    }
+`;
+
+const TRow = styled(TableRow)`
+    & > td{
+        font-size: 18px
+    }
+`;
+
+const AllUsers = () => {
+
+  const [users,setUsers]=useState([])
+
+  useEffect(()=>{
+    getUserDetails();
+  },[])
+
+  const getUserDetails=async ()=>{
+    let response=await getUser();
+    console.log(response)
+    setUsers(response.data);
+  }
+  return (
+    <div>
+     <StyledTable>
+      <TableHead>
+      <THead>
+      <TableCell>Name</TableCell>
+        <TableCell>Email</TableCell>
+        <TableCell>City</TableCell>
+        <TableCell>Contact Number</TableCell>
+      </THead> 
+      </TableHead>  
+        <TableBody>
+          {
+            users.map(user=>(
+              <TRow>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.city}</TableCell>
+                <TableCell>{user.contact}</TableCell>
+              </TRow>
+            ))
+          }
+       </TableBody>
+     </StyledTable>
+    </div>
+  )
+}
+
+export default AllUsers
+
+<!--Now table is ready but when i click on Adduser my data is come in alluser table so changes in addUser.js file  -->
+
+import React ,{useState}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import { addUser } from '../service/api';
+import {useNavigate} from 'react-router-dom'
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  contact: ''
+}
+
+const AddUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const navigate=useNavigate();
+  <!-- for navigating to allUser -->
+  const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    console.log(user)
+
+}
+const addUserDetails=async()=>{
+await addUser(user);
+navigate('/all')
+<!-- Navigate to allUser -->
+}
+
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Add User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name'/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city' />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' />  
+        </FormControl>
+        <FormControl>
+          <Button variant='contained' color="error">Delete</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default AddUser
+______________________________________________************************************____________________________________________
+<!-- Now our allUser and AddUser is done Now we add to 2 more opeartions Edit,delete add two button in allUser.js-->
+<!-- AllUser.js -->
+<StyledTable>
+  <TableHead>
+  <THead>
+  <TableCell>Name</TableCell>
+    <TableCell>Email</TableCell>
+    <TableCell>City</TableCell>
+    <TableCell>Contact Number</TableCell>
+    <TableCell></TableCell>
+  </THead> 
+  </TableHead>  
+    <TableBody>
+      {
+        users.map(user=>(
+          <TRow>
+            <TableCell>{user.name}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>{user.city}</TableCell>
+            <TableCell>{user.contact}</TableCell>
+            <TableCell>
+              <Button variant='contained'>Edit</Button>
+              &nbsp;&nbsp;
+              <Button variant='contained'>Delete</Button>
+            </TableCell>
+          </TRow>
+        ))
+      }
+   </TableBody>
+ </StyledTable>
+ ______________________________________________************************************____________________________________________
+ <!-- Now make a comp for EditUser similar to addUser cso copy that AddUser comp -->
+ <!-- EditUser.js -->
+
+ <!-- change file according to Edit  -->
+ also make Routes:Make dynamic Route here
+ <Route path="/edit/:id" element={<EditUser/>}/>
+ <!-- Now apply LInk on Buttons -->
+ <!-- AllUser.js -->
+ import {Link} from 'react-router-dom'
+
+ <Button variant='contained' component={Link} to={`/edit/${user.id}`}>Edit</Button>
+ <!-- Now make a getSingle user API -->
+ //Get signle User
+ export const getSingleUser =async(data)=>{
+   try{
+    return await axios.get(`${API_URL}/${data}`);
+   }catch(error){
+    console.log('Error while calling getSingleUser api',error.message);
+   }
+ }
+ <!-- Now go to EditUser.js -->
+ 
+import React ,{useState,useEffect}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import { getSingleUser } from '../service/api';
+import {useNavigate,useParams} from 'react-router-dom'
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  contact: ''
+}
+
+const EditUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const navigate=useNavigate();
+  const {id}=useParams();
+
+  useEffect(()=>{
+   getSignleUserData();
+  },[])
+
+  const getSignleUserData=async()=>{
+    let response =await getSingleUser(id)
+    console.log(response)
+  }
+  const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    console.log(user)
+
+}
+const addUserDetails=async()=>{
+// await addUser(user);
+// navigate('/all')
+}
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Edit User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name'/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city'  />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' />  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained' onClick={addUserDetails}>Edit User</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default EditUser
+<!-- we got data on console for perticular id now we  make use Controlled comp using Value attribute in input feild -->
+
+import React ,{useState,useEffect}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import { getSingleUser } from '../service/api';
+import {useNavigate,useParams} from 'react-router-dom'
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  contact: ''
+}
+
+const EditUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const navigate=useNavigate();
+  const {id}=useParams();
+
+  useEffect(()=>{
+   getSignleUserData();
+  },[])
+
+  const getSignleUserData=async()=>{
+    let response =await getSingleUser(id)
+    // console.log(response)
+    setUser(response.data)
+  }
+  const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    console.log(user)
+    
+
+}
+const addUserDetails=async()=>{
+// await addUser(user);
+// navigate('/all')
+}
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Edit User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name' value={user.name}/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' value={user.email} />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city' value={user.city} />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' value={user.contact} />  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained' onClick={addUserDetails}>Edit User</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default EditUser
+<!-- Now edit opeartion perform to make edituser api -->
+<!-- api.js -->
+
+//edit user
+  export const editUser =async(data,id)=>{
+    try{
+      return await axios.put(`${API_URL}/${id}`,data)
+      //
+    
+     }catch(error){
+      console.log('Error while calling editUser',error.message);
+    }
+  }
+<!-- Now import in EditUser.js -->
+import { editUser } from '../service/api';
+<!-- Final EditUser.js file is -->
+
+import React ,{useState,useEffect}from 'react'
+import { Button, FormControl, FormGroup, Input, InputLabel, Typography, styled } from '@mui/material'
+import { getSingleUser } from '../service/api';
+import {useNavigate,useParams} from 'react-router-dom'
+import { editUser } from '../service/api';
+
+const Container = styled(FormGroup)`
+    width: 50%;
+    margin: 5% 0 0 25%;
+    & > div {
+        margin-top: 20px;
+`;
+const initialValue = {
+  name: '',
+  username: '',
+  email: '',
+  contact: ''
+}
+
+const EditUser = () => {
+  const [user, setUser] = useState(initialValue);
+  const navigate=useNavigate();
+  const {id}=useParams();
+
+  useEffect(()=>{
+   getSignleUserData();
+  },[])
+
+  const getSignleUserData=async()=>{
+    let response =await getSingleUser(id)
+    // console.log(response)
+    setUser(response.data)
+  }
+  const onValueChange = (e) => {
+    setUser({...user,[e.target.name]:e.target.value})
+    console.log(user)
+    
+
+}
+const addUserDetails=async()=>{
+await editUser(user,id);
+navigate('/all')
+}
+  return (
+    <div>
+      <Container>
+        <Typography variant='h4'>Edit User</Typography>
+        <FormControl>
+          <InputLabel>Name</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='name' value={user.name}/>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Email</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='email' value={user.email} />
+        </FormControl>
+        <FormControl>
+          <InputLabel>City</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='city' value={user.city} />
+        </FormControl>
+        <FormControl>
+        <InputLabel>Contact No.</InputLabel>
+          <Input onChange={(e) => onValueChange(e)} name='contact' value={user.contact} />  
+        </FormControl>
+        <FormControl>
+        <Button variant='contained' onClick={addUserDetails}>Edit User</Button>
+        </FormControl>
+        
+      </Container>
+    </div>
+  )
+}
+
+export default EditUser
+
+
+______________________________________________************************************____________________________________________
+<!-- Delete opeartion -->
+<!-- first make api.js for delete api -->
+<!-- api.js -->
+
+<!-- //delete user -->
+  export const deleteUser =async (id)=>{
+    try{
+      return await axios.delete(`${API_URL}/${id}`)
+    }catch(error){
+  console.log('Error while calling deleteUser',error.message);
+    }
+  }
+  //AllUser.js
+  <!-- Now go to alluser:AllUser.js -->
+  import { getUser,deleteUser } from '../service/api'
+<!-- Apply function on button -->
+<Button variant='contained' color="error" onClick={()=>deleteUserData(user.id)}>Delete</Button>
+<!-- now create function to delete data and getUser. -->
+const deleteUserData=async (id)=>{
+  await deleteUser(id)
+  getUserDetails();
+}
+______________________________________*************************____________________________________________
+
+<!--  3 opeartions done sucessfully-->
+When you want to add icons from mui to your project then 
+1)npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+2)import DeleteIcon from '@mui/icons-material/Delete';
+3)<Button variant='contained' color="error" onClick={()=>deleteUserData(user.id)}><DeleteIcon/></Button>
+-------------------------------------**************************----------------------------------------------------
+<!-- Now perform view opeartion on View button  -->
+1)import VisibilityIcon from '@mui/icons-material/Delete';
+2) <Button variant='contained' ><VisibilityIcon/></Button>
+3)
+<!-- 3): Define component and state -->
+const AllUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+4)
+<!-- handle visibility Click -->
+const handleVisibilityClick = (user) => {
+  setSelectedUser(user);
+  setOpenDialog(true);
+};
+
+5)
+<!-- Define a function to close the dialog. -->
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+<!-- -->
+6)Add Button
+<Button variant="contained" onClick={() => handleVisibilityClick(user)}>
+  <VisibilityIcon />
+</Button>
+7)
+<!-- {/* Dialog to display user data */} -->
+<Dialog open={openDialog} onClose={handleCloseDialog}>
+  <DialogTitle>User Details</DialogTitle>
+  <DialogContent>
+    {selectedUser && (
+
+      <div>
+        <Typography>Name: {selectedUser.name}</Typography>
+        <Typography>Email: {selectedUser.email}</Typography>
+        <Typography>City: {selectedUser.city}</Typography>
+        <Typography>Contact Number: {selectedUser.contact}</Typography>
+      </div>
+    )}
+  </DialogContent>
+</Dialog>
+
+
+
+
+
+
+
+

@@ -1,0 +1,745 @@
+<!-- installation -->
+npm install @reduxjs/toolkit react-redux bootstrap react-router-dom
+<!-- Set up redux Envirmnent that we need -->
+<!-- Index.js -->
+    <!-- all our compo should inside the provider so we import provider from redux/toolkit  -->
+    import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={}>
+    <App />
+    </Provider>
+   
+  </React.StrictMode>
+);
+reportWebVitals();
+________________________________________________________________________________
+<!-- In above we requied store bcz store is required to store all our application data now make one file in redux/store.js -->
+import React from 'react'
+import {configureStore} from '@reduxjs/toolkit'
+
+export const store = configureStore({
+  reducer: {
+   
+  },
+})
+
+export default store
+<!-- Now import that Store in index.js -->
+
+import store from './redux/store';
+
+    <Provider store={store}>
+    <App />
+    </Provider>
+________________________________________________________________________________
+  <!-- Now create A reducer: redux/userSliceReducer.js -->
+  <!-- This having name,unitialstate,action inside this  -->
+  import { createSlice } from "@reduxjs/toolkit";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: {},
+    reducers:{
+        
+    }
+})
+ 
+
+export default userSliceReducer
+_________________________________________________________
+<!--For make intialState Now we have data.js file having json data -->
+export const userList=[
+    {
+        id:1,
+        name:"manisha",
+        email:"manisha@gmail.com"
+    },
+    {
+        id:2,
+        name:"Sangram",
+        email:"sangram@gmail.com"
+    },
+    {
+        id:3,
+        name:"Vaibahv",
+        email:"vaibhav@gmail.com"
+    }
+
+]
+________________________________________________________________________________
+<!-- now import this userList in our userSliceReducer.js -->
+import { createSlice } from "@reduxjs/toolkit";
+import { userList } from "../../Data";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: userList,
+    reducers:{
+
+    }
+})
+ 
+
+export default userSliceReducer
+
+________________________________________________________________________________
+<!-- Now pake pages to display usersList: Redux/Container/Pages/Home.js -->
+import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+const Home = () => {
+  return (
+    <div className='container'>
+        <h2>Crud App</h2>
+        <button className='btn btn-success my3'>Create+</button>
+        <table className='table'>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+      
+    </div>
+  )
+}
+
+export default Home
+<!-- Now import useSelector hook : it gives the access to use Reducer from userSliceReducer.js -->
+<!-- The useSelector hook is a feature provided by the React-Redux library that allows React components to access the state stored in a Redux store. It is a replacement for the traditional mapStateToProps function used in class-based components. -->
+import React from 'react'
+import { useSelector} from 'react-redux'
+const Home = () => {
+    const users=useSelector((state)=>state)
+  return (
+    <div className='container'>
+        <h2>Crud App</h2>
+_______________________________________________________
+<!-- userSliceReducer.js -->
+<!-- export this -->
+export default userSliceReducer.reducer;
+_______________________________________________________
+<!-- Now import this in Store.js -->
+import React from 'react'
+import {configureStore} from '@reduxjs/toolkit'
+import userSliceReducer from './Container/userSliceReducer'
+
+export const store = configureStore({
+  reducer: {
+ users:userSliceReducer
+  },
+})
+
+export default store
+_______________________________________________________
+<!-- Now we use that users reducer in our Home.js  also check on console either this three record comes or not -->
+import React from 'react'
+import { useSelector} from 'react-redux'
+const Home = () => {
+    const users=useSelector((state)=>state.users)
+    console.log(users)
+  return (
+    <div className='container'>
+        <h2>Crud App</h2>
+_______________________________________________________________________
+<!-- now we have to display this record on our webpage just use mapFunction -->
+<tbody>
+    {
+        users.map((user,index)=>(
+            <tr key={index}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td></td>
+
+            </tr>
+        ))
+    }
+    </tbody>
+    <!-- Now also add two button for edit and delete opeartion -->
+    <tbody>
+        {
+            users.map((user,index)=>(
+                <tr key={index}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td> <button type="button" className="btn btn-primary">Edit</button>
+                        <button type="button" className="btn btn-danger ms-2">Delete</button></td>
+                </tr>
+            ))
+        }
+        </tbody>
+________________________________________________________________________________
+<!-- Now make a routing:App.js -->
+
+import './App.css';
+import AddUser from './redux/Container/Pages/AddUser';
+import EditUser from './redux/Container/Pages/EditUser';
+import Home from './redux/Container/Pages/Home';
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+
+function App() {
+  return (
+    <div className="App">
+     <BrowserRouter>
+     <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/add" element={<AddUser/>}/>
+      <Route path="/edit" element={<EditUser/>}/>
+
+     </Routes>
+     </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+
+________________________________________________________________________________
+<!-- Now we have to change Button to Link which react-router-dom property so in Home.js -->
+import { Link } from 'react-router-dom';
+<h2>Crud App</h2>
+<Link  to="/add" className="btn btn-success">Create</Link>
+<!-- Check on click if correct or not  -->
+________________________________________________________________________________
+<!-- Adduser.js   create form here -->
+import React from 'react'
+
+const AddUser = () => {
+  return (
+    <div className='d-flex w-100 vh-100 justify-content-center align-items-center'>
+        <div className='w-50 border bg-secondary text-white p-5'>
+        <form>
+            <h3>Add New User </h3>
+            <div>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" placeholder="Name" className='form-control'/>
+
+            </div>
+            <div>
+                <label htmlFor="name">Email</label>
+                <input type="email" name="email" placeholder="Email" className='form-control'/>      
+            </div>
+            <br/>
+            <button className='btn btn-info'>Submit</button>
+            </form>
+        </div>
+    </div>
+  )
+}
+
+export default AddUser
+
+_________________________________________________________________________________
+<!-- Now useState hook apply for store value -->
+import React, { useState } from 'react'
+
+const AddUser = () => {
+    const [name,setName]=useState('');
+    const [email,setEmail]=useState('');
+    <!-- Now set values -->
+    <input type="text" name="name" placeholder="Name" className='form-control' onChange={e=>setName(e.target.value)}/>
+    <!-- Like Email also same -->
+    <!-- Now onSubmit function we want values so  -->
+    <form onSubmit={handleSubmit}>
+
+        const handleSubmit=(e)=>{
+            e.preventDefault()
+        }
+_________________________________________________________________________________
+<!-- Now goto userSlicerreducer to make reducer here that would be add out form values to table userSliceReducer.js -->
+import { createSlice } from "@reduxjs/toolkit"; 
+import { userList } from "../../Data";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: userList,
+    reducers:{
+       addUser:(state,action)=>{
+        console.log(action);
+       }
+    }
+})
+ 
+export const {addUser}=userSliceReducer.actions
+export default userSliceReducer.reducer
+___________________________________________________________________________________
+<!-- AddUser.js -->
+import { addUser } from '../userSliceReducer';
+<!-- Also import useDispatch method:The main benefit of using **useDispatch** is that it provides a clean and simple way to dispatch actions from React components,manage in larger applications -->
+import { UseDispatch } from 'react-redux';
+<!-- usethis  -->
+const dispatch=useDispatch();
+const handleSubmit=(e)=>{
+    e.preventDefault()
+    dispatch(addUser({id:,name,email}))
+}
+<!-- now we required useSelector also so  -->
+const [name,setName]=useState('');
+    const [email,setEmail]=useState('');
+    const users=useSelector((state)=>state.users)
+    const dispatch=useDispatch();
+    <!-- now we jsut aceess that users index using users length -->
+    dispatch(addUser({id:users[users.length-1].id+1,name,email}))
+    <!-- Now check on sumbit button either payload getting or not -->
+    <!-- we got this payload bcz of  -->
+    reducers:{
+        addUser:(state,action)=>{
+         console.log(action);
+        }
+     }
+     <!-- We want this data in table so -->
+     reducers:{
+        addUser:(state,action)=>{
+         // console.log(action);
+         state.push(action.payload);
+        }
+     }
+     <!-- Now for navigation we goes to AddUser.js -->
+     const AddUser = () => {
+        const [name,setName]=useState('');
+        const [email,setEmail]=useState('');
+        const users=useSelector((state)=>state.users)
+        const dispatch=useDispatch();
+        const navigate=useNavigate();
+    
+        const handleSubmit=(e)=>{
+            e.preventDefault()
+            dispatch(addUser({id:users[users.length-1].id+1,name,email}))
+            navigate('/')
+        }
+        <!-- check the data is come or not in table anbd aslo chcek navigation works or not -->
+___________________________________________________________________________________
+<!-- Now perform Edit opeartiuon Home.js-->
+<Link to={`/edit/${user.id}`} className="btn btn-primary">Edit</Link>
+<!-- alos in routing App.js -->
+<Route path="/edit/:id" element={<EditUser/>}/>
+___________________________________________________________________________________
+<!-- now in EditUser.js   copy same addUser.js -->
+<div className='d-flex w-100 vh-100 justify-content-center align-items-center'>
+    <div className='w-50 border bg-secondary text-white p-5'>
+    <form>
+        <h3>Edit User </h3>
+        <div>
+            <label htmlFor="name">Name</label>
+            <input type="text" name="name" placeholder="Name" className='form-control' />
+
+        </div>
+        <div>
+            <label htmlFor="name">Email</label>
+            <input type="email" name="email" placeholder="Email" className='form-control'/>      
+        </div>
+        <br/>
+        <button className='btn btn-info'>Submit</button>
+        </form>
+    </div>
+</div>
+____________________________________________________________________________________
+<!-- Now we grab the id from useParams hook for edit opeartion  -->
+
+const EditUser = () => {
+    const {id}=useParams();
+    const users=useSelector((state)=>state.users);
+    const existingUser=users.filter(f =>f.id ==id);
+    const {name,email}=existingUser[0];
+    const [uname,setName]=useState(name)
+    const [uemail,setEmail]=useState(email)
+  <!-- Now assign value -->
+  <input type="text" name="name" placeholder="Name" className='form-control' value={uname} />
+  <input type="email" name="email" placeholder="Email" className='form-control' value={uemail}/>     
+  <!-- Check working or not  -->
+  <!-- now add this  -->
+  
+  <input type="text" name="name" placeholder="Name" className='form-control' value={uname} onChange={e=>setName(e.target.value)} />
+  <!-- now make a function onSumit on handleEdit -->
+  <form onSubmit={handleEdit}>
+  const handleEdit=(e)=>{
+    e.preventDefault();
+
+  }
+
+____________________________________________________________________________________
+<!-- now we want update our record so go to userSliceReducer make reducer for edit ,userSliceReducer.js -->
+import { createSlice } from "@reduxjs/toolkit";
+import { userList } from "../../Data";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: userList,
+    reducers:{
+       addUser:(state,action)=>{
+        state.push(action.payload);
+       },
+       editUser:(state,action)=>{
+
+    }
+})
+ 
+export const {addUser,editUser}=userSliceReducer.actions
+export default userSliceReducer.reducer;
+_______________________________
+<!-- import in EditUser.js -->
+import { editUser } from '../userSliceReducer';
+const EditUser = () => {
+    const {id}=useParams();
+    const users=useSelector((state)=>state.users);
+    const existingUser=users.filter(f =>f.id ==id);
+    const {name,email}=existingUser[0];
+    const [uname,setName]=useState(name)
+    const [uemail,setEmail]=useState(email)
+    const dispatch=useDispatch();
+
+  const handleEdit=(e)=>{
+    e.preventDefault();
+    dispatch(editUser({
+        id:id,
+        name:uname,
+        email:uemail
+    }))
+
+  }
+<!-- Now go to userSliceReducer.js  -->
+editUser:(state,action)=>{
+    const{id,name,email}=action.payload;
+    const updatedUser=state.find(user=>user.id ==id)
+    if(updatedUser){
+        updatedUser.name=name;
+        updatedUser.email=email;
+    }
+   }
+}
+<!-- Now useNamvigate hhok used when update record then navigate to home page  -->
+const navigate=useNavigate();
+
+const handleEdit=(e)=>{
+  e.preventDefault();
+  dispatch(editUser({
+      id:id,
+      name:uname,
+      email:uemail
+  }))
+  navigate("/")
+
+}
+return (
+    <!-- Chweck on UI its working or not -->
+________________________________________________________________________________
+<!-- Now fore delete opeartion -->
+<button type="button" className="btn btn-danger ms-2" onClick={()=>handleDelete(user.id)}>Delete</button>
+const dispatch =useDispatch();
+const handleDelete = () =>{
+
+}
+<!-- make reducer for the delete opeartion userSliceReducer.js -->
+import { createSlice } from "@reduxjs/toolkit";
+import { userList } from "../../Data";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: userList,
+    reducers:{
+       addUser:(state,action)=>{
+        // console.log(action);
+        state.push(action.payload);
+       },
+       editUser:(state,action)=>{
+        const{id,name,email}=action.payload;
+        const updatedUser=state.find(user=>user.id ==id)
+        if(updatedUser){
+            updatedUser.name=name;
+            updatedUser.email=email;
+        }
+       },
+       deleteUser:(state,action)=>{
+        const{id}=action.payload;
+        const updatedUser=state.find(user=>user.id ==id)
+        if(updatedUser){
+            return state.filter(f=>f.id !==id )
+        }
+       }
+    }
+})
+ 
+export const {addUser,editUser,deleteUser}=userSliceReducer.actions
+export default userSliceReducer.reducer;
+______________________________
+<!-- import in Home.js -->
+import { deleteUser } from '../userSliceReducer';
+
+const Home = () => {
+    const users=useSelector((state)=>state.users)
+
+    // console.log(users)
+    const dispatch =useDispatch();
+   const handleDelete = (id) =>{
+    dispatch(deleteUser({id:id}))
+   }
+   ___________________________________________________________________________
+   <!-- So Final Home.js -->
+   import React from 'react'
+import { useDispatch, useSelector} from 'react-redux'
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { Link} from 'react-router-dom';
+import { deleteUser } from '../userSliceReducer';
+
+const Home = () => {
+    const users=useSelector((state)=>state.users)
+
+    // console.log(users)
+    const dispatch =useDispatch();
+   const handleDelete = (id) =>{
+    dispatch(deleteUser({id:id}))
+   }
+  return (
+    <div className='container'>
+        <h2>Crud App</h2>
+        <Link  to="/add" className="btn btn-success">Create</Link>
+        <table className='table'>
+            <thead>
+                <tr>
+                    <th>SrNo</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {
+                users.map((user,index)=>(
+                    <tr key={index}>
+                        <td>{user.id}</td>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                    <td> 
+                    <Link to={`/edit/${user.id}`} className="btn btn-primary">Edit</Link>
+                    <button type="button" className="btn btn-danger ms-2" onClick={()=>handleDelete(user.id)}>Delete</button>
+                    </td>
+
+                    </tr>
+                ))
+            }
+            </tbody>
+        </table>
+      
+    </div>
+  )
+}
+
+export default Home
+
+________________________________________________________________________________
+<!-- AddUser.js -->
+import React, { useState } from 'react'
+import { addUser } from '../userSliceReducer';
+import { useDispatch,useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+const AddUser = () => {
+    const [name,setName]=useState('');
+    const [email,setEmail]=useState('');
+    const users=useSelector((state)=>state.users)
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+
+    const handleSubmit=(e)=>{
+        e.preventDefault()
+        dispatch(addUser({id:users[users.length-1].id+1,name,email}))
+        navigate('/')
+    }
+  return (
+    <div className='d-flex w-100 vh-100 justify-content-center align-items-center'>
+        <div className='w-50 border bg-secondary text-white p-5'>
+        <form onSubmit={handleSubmit}>
+            <h3>Add New User </h3>
+            <div>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" placeholder="Name" className='form-control' onChange={e=>setName(e.target.value)}/>
+
+            </div>
+            <div>
+                <label htmlFor="name">Email</label>
+                <input type="email" name="email" placeholder="Email" className='form-control' onChange={e=>setEmail(e.target.value)}/>      
+            </div>
+            <br/>
+            <button className='btn btn-info'>Submit</button>
+            </form>
+        </div>
+    </div>
+  )
+}
+
+export default AddUser
+_______________________________________________________________________
+<!-- EditUser.js -->
+import React, { useState } from 'react'
+import { editUser } from '../userSliceReducer';
+import { useDispatch,useSelector } from 'react-redux';
+import { useNavigate,useParams } from 'react-router-dom';
+
+const EditUser = () => {
+    const {id}=useParams();
+    const users=useSelector((state)=>state.users);
+    const existingUser=users.filter(f =>f.id ==id);
+    const {name,email}=existingUser[0];
+    const [uname,setName]=useState(name)
+    const [uemail,setEmail]=useState(email)
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+
+  const handleEdit=(e)=>{
+    e.preventDefault();
+    dispatch(editUser({
+        id:id,
+        name:uname,
+        email:uemail
+    }))
+    navigate("/")
+
+  }
+  return (
+    <div className='d-flex w-100 vh-100 justify-content-center align-items-center'>
+        <div className='w-50 border bg-secondary text-white p-5'>
+        <form onSubmit={handleEdit}>
+            <h3>Edit User </h3>
+            <div>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" placeholder="Name" className='form-control' value={uname} onChange={e=>setName(e.target.value)} />
+
+            </div>
+            <div>
+                <label htmlFor="name">Email</label>
+                <input type="email" name="email" placeholder="Email" className='form-control' value={uemail} onChange={e=>setEmail(e.target.value)}/>      
+            </div>
+            <br/>
+            <button className='btn btn-info'>Edit User</button>
+            </form>
+        </div>
+    </div>
+  )
+}
+
+export default EditUser
+________________________________________________________________________________
+<!-- userSliceReducer.js -->
+import { createSlice } from "@reduxjs/toolkit";
+import { userList } from "../../Data";
+
+
+
+const userSliceReducer = createSlice({
+
+    name:'users',
+    initialState: userList,
+    reducers:{
+       addUser:(state,action)=>{
+        // console.log(action);
+        state.push(action.payload);
+       },
+       editUser:(state,action)=>{
+        const{id,name,email}=action.payload;
+        const updatedUser=state.find(user=>user.id ==id)
+        if(updatedUser){
+            updatedUser.name=name;
+            updatedUser.email=email;
+        }
+       },
+       deleteUser:(state,action)=>{
+        const{id}=action.payload;
+        const updatedUser=state.find(user=>user.id ==id)
+        if(updatedUser){
+            return state.filter(f=>f.id !==id )
+        }
+       }
+    }
+})
+ 
+export const {addUser,editUser,deleteUser}=userSliceReducer.actions
+export default userSliceReducer.reducer;
+_______________________________________________________________________
+<!-- store.js -->
+
+import {configureStore} from '@reduxjs/toolkit'
+import userSliceReducer from './Container/userSliceReducer'
+
+export const store = configureStore({
+  reducer: {
+ users:userSliceReducer
+  },
+})
+
+export default store
+____________________________________________________________________
+<!-- App.js -->
+import React from 'react';
+import AddUser from './redux/Container/Pages/AddUser';
+import EditUser from './redux/Container/Pages/EditUser';
+import Home from './redux/Container/Pages/Home';
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+
+function App() {
+  return (
+    <div>
+     <BrowserRouter>
+     <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="/add" element={<AddUser/>}/>
+      <Route path="/edit/:id" element={<EditUser/>}/>
+
+     </Routes>
+     </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+_______________________________________________________
+<!-- index.js -->
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+    <App />
+    </Provider>
+   
+  </React.StrictMode>
+);
+reportWebVitals();
+
